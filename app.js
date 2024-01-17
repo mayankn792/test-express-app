@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
-const port = 3000
 
-app.get('/', (res, res) => {
+app.get('/', (req, res) => {
     res.send('UP')
 })
 
+const port = process.env.PORT || 3001
 app.listen(port, () => {
     console.log(`listing on ${port}`)
 })
