@@ -26,6 +26,10 @@ app.get('/users', authToken, (req, res) => {
     res.json(users.filter(user => req.user.id === user.id))
 })
 
+app.get('/u', (req, res) => {
+    res.json(users)
+})
+
 app.post('/login', (req, res) => {
     username = req.body.username
     password = req.body.password
