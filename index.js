@@ -31,7 +31,7 @@ app.get('/users', authToken, (req, res) => {
 })
 
 app.get('/u', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Origin', req.headers.origin);
     res.json(users)
 })
 
