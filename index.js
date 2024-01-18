@@ -4,9 +4,7 @@ const cors = require('cors')
 const app = express()
 
 app.use(express.json())
-app.use(cors({
-    origin: 'http;//localhost:3000'
-}))
+app.use(cors())
 
 const jwt = require('jsonwebtoken')
 
@@ -33,6 +31,7 @@ app.get('/users', authToken, (req, res) => {
 })
 
 app.get('/u', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
     res.json(users)
 })
 
