@@ -4,9 +4,11 @@ const cors = require('cors')
 const app = express()
 
 app.use(express.json())
-app.use(cors({
-    origin: '*',
-}))
+
+const whiteList = {
+    origin: ['https://test-express-app-fe.vercel.app']
+}
+app.use(cors(whiteList))
 
 const jwt = require('jsonwebtoken')
 
