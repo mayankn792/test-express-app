@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const db = require('mongoose')
 
 const app = express()
 
@@ -12,7 +13,9 @@ app.use(cors(whiteList))
 
 const jwt = require('jsonwebtoken')
 
-const users = [
+
+
+const usersBackup = [
     {
         id: '1234',
         name : 'John',
@@ -26,6 +29,27 @@ const users = [
         phone: '9091928'
     }
 ]
+
+// load users details from mongo db
+const users = []
+db.connect('mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net/test', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log('connected to db')
+    users = db.model('coll', new db.Schema({
+        id: String,
+        name: String,
+        password: String,
+        phone: String
+    }));
+})
+.catch((err) => {
+    users = usersBackup
+    console.log(err)
+})
+
 app.get('/', (req, res) => {
     res.send('UP')
 })
