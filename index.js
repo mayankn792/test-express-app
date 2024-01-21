@@ -38,12 +38,16 @@ db.connect('mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net/test', 
 })
 .then(() => {
     console.log('connected to db')
-    users = db.model('coll', new db.Schema({
+    const Users = db.model('coll', new db.Schema({
         id: String,
         name: String,
         password: String,
         phone: String
     }));
+
+    Users.find({})
+    .then(usr => users = usr)
+    .catch(err => console.log(err))
 })
 .catch((err) => {
     console.log(err)
