@@ -50,6 +50,9 @@ async function fetchUsersData() {
     } finally {
         await client.close()
         console.log(`User - ${users}`)
+        if (users.length === 0) {
+            users = usersBackup
+        }
         return users
     }
 }
