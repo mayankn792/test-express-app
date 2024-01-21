@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 
 const whiteList = {
-    origin: ['https://test-express-app-fe.vercel.app']
+    origin: ['https://test-express-app-fe.vercel.app', 'http://localhost:3000']
 }
 app.use(cors(whiteList))
 
