@@ -13,8 +13,7 @@ app.use(cors(whiteList))
 
 const jwt = require('jsonwebtoken')
 
-
-
+// backup users data
 const usersBackup = [
     {
         id: '1234',
@@ -68,9 +67,9 @@ app.get('/users', authToken, (req, res) => {
 
 app.get('/u', (req, res) => {
     fetchUsersData()
-    .then((users) => {
-        res.json(users)
-    })
+        .then((users) => {
+            res.json(users)
+        })
 })
 
 app.post('/login', (req, res) => {
