@@ -31,7 +31,7 @@ const usersBackup = [
 ]
 
 // load users details from mongo db
-const users = []
+var users = []
 db.connect('mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net/test', {
     useNewUrlParser: true,
     useUnifiedTopology: true
