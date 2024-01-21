@@ -46,8 +46,13 @@ db.connect('mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net/test', 
     }));
 })
 .catch((err) => {
-    users = usersBackup
     console.log(err)
+})
+.finally(() => {
+    console.log(`User details - ${users}`)
+    if (users.length === 0) {
+        users = usersBackup
+    }
 })
 
 app.get('/', (req, res) => {
