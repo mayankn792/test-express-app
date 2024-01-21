@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const db = require('mongoose')
+const { MongoClient } = require('mongodb');
 
 const app = express()
 
@@ -32,32 +32,27 @@ const usersBackup = [
 
 // load users details from mongo db
 var users = []
-db.connect('mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net/test', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-    .then(() => {
-        console.log('connected to db')
-        const Users = db.model('coll', new db.Schema({
-            id: String,
-            name: String,
-            password: String,
-            phone: String
-        }))
-        console.log(Users.find({}))
-        Users.find({}).then((data) => {
-            users = data
-        })
-    })
-    .catch((err) => {
-        console.log(err)
-    })
-    .finally(() => {
-        console.log(`User details - ${users}`)
-        if (users.length === 0) {
-            users = usersBackup
-        }
-    })
+const connectionUrl = 'mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net'
+const client = new MongoClient(connectionUrl, { useNewUrlParser: true })
+
+async function fetchUsersData() {
+    try {
+        await client.connect()
+        const db = client.db('test')
+        const collection = db.collection('coll')
+        const query = {}
+        const cursor = collection.find(query)
+
+        await cursor.forEach(user => {
+            users.push(user)
+        });
+
+    } finally {
+        await client.close()
+        console.log(`User - ${users}`)
+        return users
+    }
+}
 
 app.get('/', (req, res) => {
     res.send('UP')
@@ -68,8 +63,10 @@ app.get('/users', authToken, (req, res) => {
 })
 
 app.get('/u', (req, res) => {
-    res.set('Access-Control-Allow-Origin', req.headers.origin);
-    res.json(users)
+    fetchUsersData()
+    .then((users) => {
+        res.json(users)
+    })
 })
 
 app.post('/login', (req, res) => {
