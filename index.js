@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 
 const whiteList = {
-    origin: ['https://test-express-app-fe1.vercel.app']
+    origin: ['https://test-express-app-fe.vercel.app']
 }
 app.use(cors(whiteList))
 
@@ -43,6 +43,7 @@ async function fetchUsersData() {
         const query = {}
         const cursor = collection.find(query)
 
+        users = []
         await cursor.forEach(user => {
             users.push(user)
         });
