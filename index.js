@@ -43,14 +43,11 @@ db.connect('mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net/test', 
             name: String,
             password: String,
             phone: String
-        }));
-
-        Users.find({})
-            .then((usr) => {
-                console.log(`data from db ${usr}`)
-                users = usr
-            })
-            .catch(err => console.log(err))
+        }))
+        console.log(Users.find({}))
+        Users.find({}).then((data) => {
+            users = data
+        })
     })
     .catch((err) => {
         console.log(err)
