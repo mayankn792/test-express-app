@@ -18,7 +18,7 @@ const jwt = require('jsonwebtoken')
 const usersBackup = [
     {
         id: '1234',
-        name : 'John',
+        name: 'John',
         password: 'JJJJ',
         phone: '99999112'
     },
@@ -36,28 +36,31 @@ db.connect('mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net/test', 
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
-.then(() => {
-    console.log('connected to db')
-    const Users = db.model('coll', new db.Schema({
-        id: String,
-        name: String,
-        password: String,
-        phone: String
-    }));
+    .then(() => {
+        console.log('connected to db')
+        const Users = db.model('coll', new db.Schema({
+            id: String,
+            name: String,
+            password: String,
+            phone: String
+        }));
 
-    Users.find({})
-    .then(usr => users = usr)
-    .catch(err => console.log(err))
-})
-.catch((err) => {
-    console.log(err)
-})
-.finally(() => {
-    console.log(`User details - ${users}`)
-    if (users.length === 0) {
-        users = usersBackup
-    }
-})
+        Users.find({})
+            .then((usr) => {
+                console.log(`data from db ${usr}`)
+                users = usr
+            })
+            .catch(err => console.log(err))
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+    .finally(() => {
+        console.log(`User details - ${users}`)
+        if (users.length === 0) {
+            users = usersBackup
+        }
+    })
 
 app.get('/', (req, res) => {
     res.send('UP')
@@ -76,13 +79,13 @@ app.post('/login', (req, res) => {
     username = req.body.username
     password = req.body.password
 
-    const user = verifyUserCreds(username, password) 
+    const user = verifyUserCreds(username, password)
     if (user && user.length === 0) {
         res.sendStatus(200)
     }
 
-    const token = jwt.sign({id: user[0].id, name: user[0].name}, 'TOKEN_SECRET', {expiresIn: '600s'})
-    res.json({access_token: token})
+    const token = jwt.sign({ id: user[0].id, name: user[0].name }, 'TOKEN_SECRET', { expiresIn: '600s' })
+    res.json({ access_token: token })
 })
 
 function verifyUserCreds(username, password) {
@@ -95,7 +98,7 @@ function authToken(req, res, next) {
 
     jwt.verify(token, 'TOKEN_SECRET', (err, user) => {
         if (err) return res.sendStatus(403)
-        req.user = user 
+        req.user = user
         next()
     })
 }
