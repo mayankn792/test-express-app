@@ -79,7 +79,7 @@ app.post('/login', (req, res) => {
         res.sendStatus(200)
     }
 
-    const token = jwt.sign({ id: user[0].id, name: user[0].name }, 'TOKEN_SECRET', { expiresIn: '600s' })
+    const token = jwt.sign({ id: user[0].id, name: user[0].name }, process.env.TOKEN_SECRET, { expiresIn: '600s' })
     res.json({ access_token: token })
 })
 
@@ -91,7 +91,7 @@ function authToken(req, res, next) {
     const token = req.headers['authorization'].split(' ')[1]
     if (null == token) return res.sendStatus(401)
 
-    jwt.verify(token, 'TOKEN_SECRET', (err, user) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403)
         req.user = user
         next()
