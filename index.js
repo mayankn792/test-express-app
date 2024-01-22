@@ -15,7 +15,7 @@ app.use(cors(whiteList))
 const jwt = require('jsonwebtoken')
 
 // load users details from mongo db
-const connectionUrl = 'mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net'
+const connectionUrl = Process.env.CONNECTION_URL
 const client = new MongoClient(connectionUrl, { useNewUrlParser: true })
 
 async function fetchUsersData() {
