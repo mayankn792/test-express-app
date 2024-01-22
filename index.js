@@ -28,7 +28,7 @@ async function fetchUsersData() {
 
         users = []
         await cursor.forEach(user => {
-            // users.push(user)
+            users.push(user)
         });
 
     } finally {
@@ -36,20 +36,18 @@ async function fetchUsersData() {
         console.log(`User - ${users}`)
         if (users.length === 0) {
             users = getBackupData()
-            console.log(users)
+            console.log(users[0])
         }
         return users
     }
 }
 
 function getBackupData() {
-    return fs.readFileSync('./db.json', 'utf8', (err, data) => {
+    return fs.readFileSync('./db.json', 'utf-8', (err, data) => {
         if (err) {
-            console.log(err)
             return []
         } else {
-            console.log(JSON.parse(data))
-            return JSON.parse(data)
+            return data
         }
     })
 }
