@@ -1,6 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const fs = require('fs')
+
+require('dotenv').config(); 
+
 const { MongoClient } = require('mongodb');
 
 const app = express()
@@ -15,7 +18,7 @@ app.use(cors(whiteList))
 const jwt = require('jsonwebtoken')
 
 // load users details from mongo db
-const connectionUrl = Process.env.CONNECTION_URL
+const connectionUrl = process.env.CONNECTION_URL
 const client = new MongoClient(connectionUrl, { useNewUrlParser: true })
 
 async function fetchUsersData() {
@@ -95,7 +98,7 @@ function authToken(req, res, next) {
     })
 }
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT
 app.listen(port, () => {
     console.log(`listing on ${port}`)
 })
