@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const fs = require('fs')
 const { MongoClient } = require('mongodb');
 
 const app = express()
@@ -13,24 +14,7 @@ app.use(cors(whiteList))
 
 const jwt = require('jsonwebtoken')
 
-// backup users data
-const usersBackup = [
-    {
-        id: '1234',
-        name: 'John',
-        password: 'JJJJ',
-        phone: '99999112'
-    },
-    {
-        id: '2345',
-        name: 'Jim',
-        password: 'hello',
-        phone: '9091928'
-    }
-]
-
 // load users details from mongo db
-var users = []
 const connectionUrl = 'mongodb+srv://primary-db:db_main@primary.4vb8qle.mongodb.net'
 const client = new MongoClient(connectionUrl, { useNewUrlParser: true })
 
@@ -44,17 +28,30 @@ async function fetchUsersData() {
 
         users = []
         await cursor.forEach(user => {
-            users.push(user)
+            // users.push(user)
         });
 
     } finally {
         await client.close()
         console.log(`User - ${users}`)
         if (users.length === 0) {
-            users = usersBackup
+            users = getBackupData()
+            console.log(users)
         }
         return users
     }
+}
+
+function getBackupData() {
+    return fs.readFileSync('./db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.log(err)
+            return []
+        } else {
+            console.log(JSON.parse(data))
+            return JSON.parse(data)
+        }
+    })
 }
 
 app.get('/', (req, res) => {
